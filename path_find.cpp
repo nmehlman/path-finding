@@ -108,12 +108,8 @@ struct Square{
 
 };
 
-void Update(Square &s, Square &end){
+void Update(Square &s){
     
-    if(s==end){
-        return;
-    }
-
     int current_dist = s.value;
 
     if(s.visited == false && current_dist>=0){
@@ -151,6 +147,9 @@ Square Propagate(Square &start, Square &end){
     if(start == end)
         return start;
     else{
+        start.map.Print();
+        cout<<endl;
+        Update(start);
         Square next_top = start.top(), next_bottom = start.bottom();
         Square next_left = start.left(), next_right = start.right();
         return Propagate(next_top,end);
