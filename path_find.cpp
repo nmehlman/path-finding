@@ -114,10 +114,12 @@ void Update(Square &s, Square &end){
         return;
     }
 
-    if(s.visited == false){
-        s.visited = true;
-        int current_dist = s.value;
+    int current_dist = s.value;
 
+    if(s.visited == false && current_dist>=0){
+        
+        s.visited = true;
+        
         //Update top
         Square top = s.top();
         if(top!=s && top.value==-1){
@@ -142,12 +144,20 @@ void Update(Square &s, Square &end){
             left.value = current_dist+1;
         }
 
-        Update(left,end);
-        Update(right,end);
-        Update(top,end);
-        Update(bottom,end);
-
     }    
+}
+
+Square Propagate(Square &start, Square &end){
+    if(start == end)
+        return start;
+    else{
+        Square next_top = start.top(), next_bottom = start.bottom();
+        Square next_left = start.left(), next_right = start.right();
+        return Propagate(next_top,end);
+        return Propagate(next_right,end);
+        return Propagate(next_bottom,end); 
+        return Propagate(next_left,end);   
+    }
 }
 
 int main(){
@@ -155,7 +165,7 @@ int main(){
     Map map1(infile);
     Square start(map1,map1.start);
     Square end(map1,map1.end);
-    Update(start,end);
+    Propagate(start,end);
     map1.Print();
     return 0;
 }
