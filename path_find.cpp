@@ -98,12 +98,12 @@ struct Square{
     }
     bool operator !=(Square &s)
         {
-            return !((s.x == x)&&(s.y==y)&& (&s.map == &map));
+            return !((s.x == x) && (s.y==y) && (&s.map == &map));
         }
     
     bool operator == (Square &s)
         {
-            return ((s.x == x)&&(s.y==y)&& (&s.map == &map));
+            return ((s.x == x)&&(s.y==y) && (&s.map == &map));
         }
 
 };
@@ -143,19 +143,35 @@ void Update(Square &s){
     }    
 }
 
-Square Propagate(Square &start, Square &end){
+bool Propagate(Square &start, Square &end){
     if(start == end)
-        return start;
+        return true;
     else{
         start.map.Print();
         cout<<endl;
         Update(start);
         Square next_top = start.top(), next_bottom = start.bottom();
         Square next_left = start.left(), next_right = start.right();
-        return Propagate(next_top,end);
-        return Propagate(next_right,end);
-        return Propagate(next_bottom,end); 
-        return Propagate(next_left,end);   
+        bool advance = true;
+        if(advance && next_top != start){
+            advance = false;
+            advance = Propagate(next_top,end);
+        }
+        if(advance && next_right != start){
+            advance = false;
+            advance = Propagate(next_right,end);
+        }
+        if(next_bottom != start){
+            advance = false;
+            advance = Propagate(next_bottom,end);
+        }
+        if(next_left != start){
+            advance = false;
+            return Propagate(next_left,end); 
+        }
+        else
+            return true;
+          
     }
 }
 
